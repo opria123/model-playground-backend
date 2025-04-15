@@ -1,0 +1,17 @@
+flask
+gunicorn
+python-dotenv
+transformers
+torch==2.2.0
+accelerate==0.27.2
+numpy==1.26.4
+tokenizers
+langgraph
+langchain
+langchain-community
+langchain_huggingface
+datasets
+rank_bm25
+duckduckgo-search
+smolagents[litellm]
+# Temporarily removing smolagents as it's causing dependency conflicts

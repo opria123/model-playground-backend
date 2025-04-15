@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"  # Expose your app's port
+    environment:
+      - API_BASE=http://ollama:11434  # Use service name for internal communication
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container
+    depends_on:
+      - ollama
+        # condition: service_healthy
+
+  ollama:
+    image: ollama/ollama:latest  # Replace with the actual Ollama image
+    ports:
+      - "11435:11434"  # Expose the Ollama API port on 11435
+    restart: unless-stopped  # Restart policy for the Ollama service
+    entrypoint: >
+      sh -c "
+        ollama serve &
+        sleep 2 &&
+        ollama pull qwen2.5:7b &&
+        wait
+      "
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:11435"]
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 50
+
+networks:
+  default:
+    driver: bridge  # Use the default bridge network
